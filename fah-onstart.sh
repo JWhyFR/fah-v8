@@ -49,7 +49,7 @@ echo "**** install runtime packages : lufah ****" && \
   pipx install lufah
    
 echo "**** install foldingathome ****" && \
-  mkdir /var/log/fah-client \
+  mkdir /var/log/fah-client && \
   download_url="https://download.foldingathome.org/releases/public/fah-client/debian-10-64bit/release/fah-client_8.4.9-64bit-release.tar.bz2" && \
   curl -o \
     /tmp/fah.tar.bz2 -L \

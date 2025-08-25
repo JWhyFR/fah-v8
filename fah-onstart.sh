@@ -40,8 +40,8 @@ wget https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86
 mv cuda-${UBUNTU_REPO}.pin /etc/apt/preferences.d/cuda-repository-pin-600
 
 # Mise à jour et installation du paquet ciblé
-apt update
-apt install -y "$CUDA_PACKAGE"
+apt-get update
+apt-get install -y "$CUDA_PACKAGE"
 
 apt-get install -y --no-install-recommends --no-install-suggests ocl-icd-opencl-dev intel-opencl-icd
 

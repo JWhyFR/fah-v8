@@ -1,4 +1,7 @@
 # onstart script for Folding@Home v8 running on vast.ai
+# basé sur le script https://github.com/firedfly/fah-v8-scripts
+# modifié pour déporter les runtime cuda dans le script, plutot que l'image docker
+# et ajout de qq variables d'env. pour configurer FAH
 
 echo '**** ensuring we are in the /root  directory ****'
 cd /root
@@ -187,6 +190,6 @@ do
         FAH_AUTOSTART=false
     fi
 
-    # Sleep 5 seconds and then double check the config is accuate still
+    # Sleep 5 seconds and then double check the config is accurate still
     sleep 5
 done

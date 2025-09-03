@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+apt-get update && \
+ apt-get install -y --no-install-recommends --no-install-suggests curl ntpsec-ntpdate  
+
+ 
 # Fonction d'affichage du décalage
 function show_diff() {
   local label="$1"

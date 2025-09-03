@@ -28,7 +28,7 @@ if [ -n "$API_TIME" ]; then
   DIFF_API=$((LOCAL_TS - API_TIME))
   show_diff "API publique" "$DIFF_API"
 else
-  echo "Impossible de récupérer l'heure via l'API publique."
+  echo "API publique : Impossible de récupérer l'heure."
 fi
 
 # 3. Heure via NTP (time.google.com)
@@ -38,5 +38,5 @@ if [[ "$OFFSET" =~ ^[-+]?[0-9.]+$ ]]; then
   OFFSET_INT=$(printf "%.0f" "$OFFSET")
   show_diff "Serveur NTP" "$OFFSET_INT"
 else
-  echo "Impossible de récupérer l'heure via NTP."
+  echo "Serveur NTP : Impossible de récupérer l'heure."
 fi

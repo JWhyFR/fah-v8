@@ -20,7 +20,7 @@ apt-get update 1>/dev/null 2>&1 && \
 function show_diff() {
   local label="$1"
   local diff="$2"
-  if [ ${diff#-} -gt 10 ]; then
+  if [ ${diff#[-+]} -gt 10 ]; then
     log "$label : décalage de ${diff}s par rapport à l'heure système."
   else
     log "$label : synchronisé (écart de ${diff}s)."

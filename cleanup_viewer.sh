@@ -11,6 +11,6 @@ while true; do
     # -delete : supprime directement les fichiers trouvés
     find "$TARGET_DIR" -type f -name "viewerFrame*.json" -size +1M -delete
 
-    # Attente de 60 secondes avant la prochaine exécution
-    sleep 60
+    # Attente de 30 secondes avant la prochaine exécution
+    sleep 30
 done

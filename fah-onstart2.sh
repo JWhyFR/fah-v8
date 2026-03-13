@@ -3,6 +3,7 @@
 # modifié pour déporter les runtime cuda dans le script, plutot que l'image docker
 # et ajout de qq variables d'env. pour configurer FAH
 # MODIF: pour installer le CUDA_PACKAGE le plus proche, si pas trouvé la version exacte
+# MODIF: ajout lien vers la lib.
 
 echo '**** ensuring we are in the /root  directory ****'
 cd /root
@@ -85,6 +86,32 @@ echo "--- Package sélectionné : $CUDA_PACKAGE (Distance: $MIN_DIFF) ---"
 apt-get install -y  "$CUDA_PACKAGE"
 
 apt-get install -y --no-install-recommends --no-install-suggests ocl-icd-opencl-dev intel-opencl-icd
+
+
+# --- AJOUT LIB AU CHEMIN ---
+
+# 1. On récupère le chemin du dossier d'install (ex: /usr/local/cuda-12.5)
+# (Variable déjà définie plus haut dans ton script)
+CUDA_PATH="/usr/local/cuda-${INSTALLED_VER}"
+
+# 2. On trouve où le driver est injecté (souvent /usr/lib/x86_64-linux-gnu)
+DRIVER_PATH=$(find /usr/lib -name "libcuda.so.1" -exec dirname {} \; | head -n 1)
+
+# 3. On crée le lien symbolique proprement dans le dossier du driver
+if [ -n "$DRIVER_PATH" ]; then
+    ln -sf "$DRIVER_PATH/libcuda.so.1" "$DRIVER_PATH/libcuda.so"
+fi
+
+# 4. On exporte TOUT dans le LD_LIBRARY_PATH
+# Priorité au toolkit, puis au driver, puis au reste
+export LD_LIBRARY_PATH="${CUDA_PATH}/targets/x86_64-linux/lib:${DRIVER_PATH}:${LD_LIBRARY_PATH}"
+export PATH="${CUDA_PATH}/bin:${PATH}"
+
+# 5. On rafraîchit le cache système
+ldconfig 2>/dev/null
+
+echo "--- Configuration terminée pour CUDA $INSTALLED_VER ---"
+
 
 echo "**** install runtime packages : lufah ****" && \
   pipx install lufah

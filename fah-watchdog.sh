@@ -2,7 +2,7 @@
 
 # --- CONFIGURATION ---
 LOG_FILE="/var/log/fah-client/log.txt"
-CHECK_INTERVAL=120
+CHECK_INTERVAL=60
 
 # Messages d'erreur à détecter
 ERR_LOG="Lost connection to remote: Websocket not active"
@@ -27,7 +27,7 @@ echo "[$(date)] Message à chercher dans LUFAH  : $ERR_LUFAH"
 echo "[$(date)] Commande pour la relance : cd $WORKING_DIR && /bin/bash $EXEC_CMD"
 
 # --- ATTENTE INITIALE ---
-WAIT_TIME=$((CHECK_INTERVAL * 1))
+WAIT_TIME=$((CHECK_INTERVAL * 2))
 echo "[$(date)] Attente de stabilisation ($WAIT_TIME secondes) avant le premier contrôle..."
 sleep "$WAIT_TIME"
 # ------------------------
@@ -69,7 +69,7 @@ while true; do
             fi
         else
             # Message si tout va bien
-            echo "[$(date)] OK : Le log évolue normalement ($LOG_FILE)."
+            echo "[$(date)] OK : Le log évolue normalement..."
         fi
 
         # Mise à jour de la référence pour le prochain tour

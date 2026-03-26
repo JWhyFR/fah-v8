@@ -4,6 +4,7 @@
 # et ajout de qq variables d'env. pour configurer FAH
 # MODIF: pour installer le CUDA_PACKAGE le plus proche, si pas trouvé la version exacte
 # MODIF: ajout lien vers la lib.
+# MODIF: passage du curl & wget pour en silencieux/non interactif, pour ne pas bloquer si ce script est relancé
 
 echo '**** ensuring we are in the /root  directory ****'
 cd /root
@@ -28,12 +29,11 @@ echo "Dépôt NVIDIA ciblé : $UBUNTU_REPO"
 mkdir -p /etc/apt/keyrings
 
 curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/3bf863cc.pub | \
-    gpg --dearmor -o /etc/apt/keyrings/cuda-archive-keyring.gpg
+  gpg --yes --dearmor -o /etc/apt/keyrings/cuda-archive-keyring.gpg
 
 echo "deb [signed-by=/etc/apt/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/ /" > /etc/apt/sources.list.d/cuda.list
 
-wget https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/cuda-${UBUNTU_REPO}.pin
-mv cuda-${UBUNTU_REPO}.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget -q https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/cuda-${UBUNTU_REPO}.pin -O /etc/apt/preferences.d/cuda-repository-pin-600
 
 echo "**** apt-get clean/update ****" && \
   apt-get clean && \

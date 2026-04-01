@@ -1,8 +1,15 @@
 #!/bin/bash
 
+# Vérifie si le 1er argument est un nombre ET s'il est >= 60
+if [[ "$1" =~ ^[0-9]+$ ]] && [ "$1" -ge 60 ]; then
+    CHECK_INTERVAL=$1
+else
+    # Si c'est vide, pas un nombre, ou inférieur à 60
+    CHECK_INTERVAL=60
+fi
+
 # --- CONFIGURATION ---
 LOG_FILE="/var/log/fah-client/log.txt"
-CHECK_INTERVAL=60
 
 # Messages d'erreur à détecter
 ERR_LOG="Lost connection to remote: Websocket not active"

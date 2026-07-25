@@ -20,38 +20,25 @@ echo "**** install runtime packages : misc ****" && \
 purge_nvidia_drivers() {
     echo "=== Vérification des paquets NVIDIA installés dans le container ==="
 
-    # Liste brute des paquets contenant 'nvidia'
     local ALL_PKGS
     ALL_PKGS=$(dpkg -l | awk '/nvidia/ {print $2}')
 
-    if [ -z "$ALL_PKGS" ]; then
-        echo "Aucun paquet NVIDIA détecté."
-        return 0
-    fi
-
     echo "Paquets NVIDIA détectés :"
-    echo "$ALL_PKGS"
+    echo "${ALL_PKGS:-aucun}"
     echo
-
-    echo "=== Filtrage des paquets à supprimer (drivers, kernel, firmware, utils) ==="
 
     local REMOVE_PKGS
     REMOVE_PKGS=$(echo "$ALL_PKGS" | grep -E \
         'nvidia-(driver|kernel|firmware|utils|compute|modprobe|dkms|opencl)|libnvidia|libnvidia-ml|libnvidia-gl|libnvidia-extra'
     )
 
-    if [ -z "$REMOVE_PKGS" ]; then
+    if [ -n "$REMOVE_PKGS" ]; then
+        echo "=== Suppression des paquets NVIDIA ==="
+        sudo apt remove --purge -y $REMOVE_PKGS
+        sudo apt autoremove --purge -y
+    else
         echo "Aucun paquet NVIDIA dangereux à supprimer."
-        return 0
     fi
-
-    echo "Paquets à supprimer :"
-    echo "$REMOVE_PKGS"
-    echo
-
-    echo "=== Suppression des paquets NVIDIA ==="
-    sudo apt remove --purge -y $REMOVE_PKGS
-    sudo apt autoremove --purge -y
 
     echo
     echo "=== Vérification post-purge ==="
@@ -63,7 +50,6 @@ purge_nvidia_drivers() {
 
     echo "=== Purge NVIDIA terminée ==="
 }
-
 
 purge_nvidia_drivers
 

@@ -55,7 +55,7 @@ purge_nvidia_drivers
 
 
 echo "**** install runtime packages : cuda ****" && \
-apt-get install -y $(apt-cache search libcudart | grep -E '^libcudart[0-9]+' | sort -r | head -n1 | cut -d' ' -f1)
+apt-get install -y $(apt-cache search libcudart | grep -E '^libcudart[0-9]+' | sort -r | head -n1 | cut -d' ' -f1) --no-install-recommends --no-install-suggests
 
 # Récupère la version d'Ubuntu (ex: 22.04)
 UBUNTU_VERSION=$(lsb_release -rs)

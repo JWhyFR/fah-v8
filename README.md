@@ -7,7 +7,7 @@ Pour apprendre à les intégrer dans un template Vast.ai et configurer correctem
 
 La plupart de ces scripts peuvent être exécutés en arrière-plan à l'aide de la commande `nohup` suivie d'une esperluette (`&`). Leurs flux de sortie peuvent être redirigés vers des fichiers de log dédiés, dont le contenu peut lui-même être redirigé vers la sortie standard du conteneur (`> /proc/1/fd/1`) pour être directement consultable depuis l'interface Vast.ai via le bouton "LOG" de l'instance.
 
-De plus, la plupart des dépendances nécessaires (comme `curl`, `bzip2`, `pipx`, `screen`, `libexpat1`, `jq`, etc.) sont gérées automatiquement par les scripts d'initialisation ou définies dans le `Dockerfile` inclus.
+De plus, la plupart des dépendances nécessaires (comme `curl`, `bzip2`, `pipx`, `screen`, `libexpat1`, etc.) sont gérées automatiquement par les scripts d'initialisation ou définies dans le `Dockerfile` inclus.
 
 💡 **Remarque** : Seul le script d'initialisation (`fah-onstart-cuda.sh` ou -au pire- sa version précédente) est strictement indispensable au bon démarrage du client Folding@home sur Vast.ai, l'utilisation des autres scripts de surveillance et de nettoyage restant optionnelle.
 
@@ -74,7 +74,7 @@ curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/diff_ntp.sh -o diff_nt
 ./diff_ntp.sh
 ```
 
-## Dockerfile
+### [Dockerfile](Dockerfile)
 Dockerfile permettant de créer une image simple basée sur Ubuntu 24.04, optimisée pour un environnement non interactif et allégée des caches superflus.
 L'image est disponible ici : https://hub.docker.com/r/jwhyfr/fah/tags
 
@@ -93,7 +93,7 @@ To learn how to integrate them into a Vast.ai template and properly configure th
 
 Most of these scripts can be executed in the background using the `nohup` command followed by an ampersand (`&`). Their output streams can be redirected to dedicated log files, the contents of which can themselves be piped to the container's standard output (`> /proc/1/fd/1`) to be directly viewable from the Vast.ai interface via the instance's "LOG" button.
 
-Furthermore, most required dependencies (such as `curl`, `bzip2`, `pipx`, `screen`, `libexpat1`, `jq`, etc.) are handled automatically by the initialization scripts or defined in the included `Dockerfile`.
+Furthermore, most required dependencies (such as `curl`, `bzip2`, `pipx`, `screen`, `libexpat1`, etc.) are handled automatically by the initialization scripts or defined in the included `Dockerfile`.
 
 💡 **Note**: Only the initialization script (`fah-onstart-cuda.sh` o r—at worst— its previous version) is strictly required for the Folding@home client to start properly on Vast.ai; using the other monitoring and maintenance scripts remains optional.
 
@@ -160,6 +160,6 @@ curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/diff_ntp.sh -o diff_nt
 ./diff_ntp.sh
 ```
 
-## Dockerfile
+### [Dockerfile](Dockerfile)
 Dockerfile used to create a simple image based on Ubuntu 24.04, optimized for a non-interactive environment and stripped of unnecessary caches.
 The image is available here: [https://hub.docker.com/r/jwhyfr/fah/tags](https://hub.docker.com/r/jwhyfr/fah/tags)

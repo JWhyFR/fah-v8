@@ -23,7 +23,9 @@ if [ ! -d "$IFACE_PATH" ]; then
     exit 1
 fi
 
-# --- DEFAULT THRESHOLDS (IN MB) ---
+# --- CONFIGURATION DES DELAIS & SEUILS (IN MB) ---
+QUICK_CHECK_MINS=3
+
 MAX_MB_5M=200
 MAX_MB_20M=300
 MAX_MB_60M=400
@@ -48,7 +50,8 @@ alert_active_dl_5m=0; alert_active_ul_5m=0
 alert_active_dl_20m=0; alert_active_ul_20m=0
 alert_active_dl_60m=0; alert_active_ul_60m=0
 
-# Minute tick counter for hourly summary
+# Flag & tick counter
+first_run=true
 tick_counter=0
 
 # --- STARTUP BANNER (BUFFERED) ---
@@ -112,6 +115,25 @@ check_alert() {
     fi
 }
 
+print_quick_check() {
+    local mins=$1
+    local dl_bytes=$((hist_rx[0] - hist_rx[$mins]))
+    local ul_bytes=$((hist_tx[0] - hist_tx[$mins]))
+    local dl_mo=$((dl_bytes / 1024 / 1024))
+    local ul_mo=$((ul_bytes / 1024 / 1024))
+    
+    local summary_buf
+    summary_buf=$(cat <<EOF
+----------------------------------------
+[$(date +'%H:%M:%S')] [INITIAL CHECK] Usage over the first ${mins} minute(s) on $INTERFACE:
+ - DL = ${dl_mo} MB
+ - UL = ${ul_mo} MB
+----------------------------------------
+EOF
+)
+    echo "$summary_buf"
+}
+
 print_periodic_summary() {
     local summary_buf
     if [ ${#hist_rx[@]} -gt 60 ]; then
@@ -122,7 +144,7 @@ print_periodic_summary() {
         summary_buf=$(cat <<EOF
 ----------------------------------------
 [$(date +'%H:%M:%S')] [HOURLY REPORT] Usage over the last hour on $INTERFACE:
- - DL = ${dl_mo} MB 
+ - DL = ${dl_mo} MB
  - UL = ${ul_mo} MB
 ----------------------------------------
 EOF
@@ -155,9 +177,17 @@ while true; do
     check_alert 20 "$THRESH_20M" "${MAX_MB_20M}MB"
     check_alert 60 "$THRESH_60M" "${MAX_MB_60M}MB"
 
-    ((tick_counter++))
-    if [ "$tick_counter" -ge 60 ]; then
-        print_periodic_summary
-        tick_counter=0
+    if [ "$first_run" = true ]; then
+        ((tick_counter++))
+        if [ "$tick_counter" -ge "$QUICK_CHECK_MINS" ]; then
+            print_quick_check "$QUICK_CHECK_MINS"
+            first_run=false
+        fi
+    else
+        ((tick_counter++))
+        if [ "$tick_counter" -ge 60 ]; then
+            print_periodic_summary
+            tick_counter=0
+        fi
     fi
 done

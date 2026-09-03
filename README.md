@@ -80,6 +80,14 @@ curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/diff_ntp.sh -o diff_nt
 ./diff_ntp.sh
 ```
 
+### 8. [fah-fixssh.sh](fah-fixssh.sh)
+- **Rôle** : Utilitaire de diagnostic et de réparation automatique des accès SSH. Vérifie le propriétaire et les permissions du dossier `/root/.ssh` ainsi que du fichier `authorized_keys` afin de corriger l'erreur `Authentication refused: bad ownership or modes for file [...]` provoquée par certains hôtes, garantissant ainsi l'accès SSH au conteneur.
+- **Utilisation (dans le template)** :
+```
+curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/fah-fixssh.sh -o fah-fixssh.sh && chmod +x fah-fixssh.sh
+./fah-fixssh.sh
+```
+
 ### [Dockerfile](Dockerfile)
 Dockerfile permettant de créer une image simple basée sur Ubuntu 24.04, optimisée pour un environnement non interactif et allégée des caches superflus.
 L'image est disponible ici : https://hub.docker.com/r/jwhyfr/fah/tags
@@ -170,6 +178,14 @@ nohup ./cleanup_viewer.sh >/dev/null 2>&1 &
 ```
 curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/diff_ntp.sh -o diff_ntp.sh && chmod +x diff_ntp.sh
 ./diff_ntp.sh
+```
+
+### 8. [fah-fixssh.sh](fah-fixssh.sh)
+- **Role**: SSH permissions diagnostic and auto-repair utility. Checks ownership and permissions on `/root/.ssh` and `/root/.ssh/authorized_keys` to fix `Authentication refused: bad ownership or modes for file [...]` errors caused by host provisioning issues, ensuring seamless SSH access to the container.
+- **Usage (in template)**:
+```
+curl https://raw.githubusercontent.com/JWhyFR/fah-v8/main/fah-fixssh.sh -o fah-fixssh.sh && chmod +x fah-fixssh.sh
+./fah-fixssh.sh
 ```
 
 ### [Dockerfile](Dockerfile)

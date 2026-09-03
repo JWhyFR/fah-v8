@@ -93,10 +93,6 @@ Dockerfile permettant de créer une image simple basée sur Ubuntu 24.04, optimi
 L'image est disponible ici : https://hub.docker.com/r/jwhyfr/fah/tags
 
 
-Voici la traduction anglaise exacte de ton texte, avec l'indentation de 4 espaces pour préserver le texte brut sans casse de rendu Markdown :
-
-
-
 
 # [EN] FAH-v8 Automation Scripts
 
@@ -109,7 +105,7 @@ Most of these scripts can be executed in the background using the `nohup` comman
 
 Furthermore, most required dependencies (such as `curl`, `bzip2`, `pipx`, `screen`, `libexpat1`, etc.) are handled automatically by the initialization scripts or defined in the included `Dockerfile`.
 
-💡 **Note**: Only the initialization script (`fah-onstart-cuda.sh` o r—at worst— its previous version) is strictly required for the Folding@home client to start properly on Vast.ai; using the other monitoring and maintenance scripts remains optional.
+💡 **Note**: Only the initialization script (`fah-onstart-cuda.sh` or —at worst— its previous version) is strictly required for the Folding@home client to start properly on Vast.ai; using the other monitoring and maintenance scripts remains optional.
 
 ## Scripts Description
 

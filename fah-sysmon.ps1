@@ -46,10 +46,17 @@ function Get-FahMonitoring {
 
     # === OS INFO ===
     $output += "`n=== OS INFO ==="
-    $osName = $os.Caption
-    $kernelVersion = $os.Version
-    $output += "OS Distribution    : $osName"
-    $output += "Kernel Version     : $kernelVersion"
+    # Lecture dans le registre Windows (Version texte 25H2 + Révision de build UBR)
+    $regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
+    $displayVersion = (Get-ItemProperty -Path $regPath -Name DisplayVersion -ErrorAction SilentlyContinue).DisplayVersion
+    $ubr = (Get-ItemProperty -Path $regPath -Name UBR -ErrorAction SilentlyContinue).UBR
+
+    # Reconstruction du build exact (ex: 10.0.26200.9168) et du nom complet
+    $fullBuild = if ($ubr) { "$($os.Version).$ubr" } else { $os.Version }
+    $distroStr = if ($displayVersion) { "$($os.Caption) ($displayVersion)" } else { $os.Caption }
+
+    $output += "OS Distribution    : $distroStr"
+    $output += "Kernel Version     : $fullBuild"
 
     # === DRIVER & CUDA INFO ===
     $output += "`n=== DRIVER & CUDA INFO ==="

@@ -30,7 +30,7 @@ if ! grep -q '$HOME/.local/bin' ~/.bashrc; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 fi
 
-uv tool install --python 3.15.2 lufah
+uv tool install --python ">=3.15.2,<3.16" lufah
 
 echo "**** install runtime packages : cuda ****" && \
 apt-get install -y $(apt-cache search libcudart | grep -E '^libcudart[0-9]+' | sort -r | head -n1 | cut -d' ' -f1)  --no-install-recommends --no-install-suggests

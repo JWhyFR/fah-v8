@@ -9,12 +9,28 @@
 echo '**** ensuring we are in the /root  directory ****'
 cd /root
 
-echo "**** apt-get clean/update ****" && \
-  apt-get clean && \
-  apt-get update
+echo "**** remove : pipx ****" && \
+apt-get remove --purge -y pipx && \
+	apt-get autoremove --purge -y && \
+	rm -rf ~/.local/pipx ~/.local/bin/pipx
+
+echo "**** apt-get update & ugprade ****" && \
+	apt-get update && \
+	apt-get install --reinstall -y ca-certificates && update-ca-certificates && \
+	apt-get -y upgrade
 
 echo "**** install runtime packages : misc ****" && \
-  apt-get install -y bzip2 libexpat1 screen pipx
+  apt-get install -y bzip2 libexpat1 screen
+
+echo "**** install runtime packages : uv ****" && \
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+export PATH="$HOME/.local/bin:$PATH"
+if ! grep -q '$HOME/.local/bin' ~/.bashrc; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+fi
+
+uv tool install --python 3.15.2 lufah
 
 echo "**** install runtime packages : cuda ****" && \
 apt-get install -y $(apt-cache search libcudart | grep -E '^libcudart[0-9]+' | sort -r | head -n1 | cut -d' ' -f1)  --no-install-recommends --no-install-suggests
@@ -108,11 +124,7 @@ echo "INSTALLATION TERMINÉE !"
 echo "CUDA Version : $INSTALLED_VER"
 echo "Dossier : $CUDA_HOME"
 echo "------------------------------------------------"
-
-
-echo "**** install runtime packages : lufah ****" && \
-  pipx install lufah
-   
+ 
 echo "**** install foldingathome ****" && \
   mkdir /var/log/fah-client && \
   download_url="https://download.foldingathome.org/releases/public/fah-client/debian-10-64bit/release/latest.tar.bz2" && \

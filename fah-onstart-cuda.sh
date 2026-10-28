@@ -60,7 +60,8 @@ dpkg --configure -a
 
 # --- 1. DÉTECTION DE LA VERSION DU DRIVER ---
 # On récupère ce que le driver supporte (ex: 12.2)
-CUDA_FULL_VERSION=$(nvidia-smi | grep -i "cuda version" | sed -E 's/.*CUDA Version: ([0-9]+\.[0-9]+).*/\1/')
+CUDA_FULL_VERSION=$(nvidia-smi | grep -oiE 'cuda (umd )?version[: ]+[0-9]+(\.[0-9]+)?' | grep -oE '[0-9]+(\.[0-9]+)?' | head -n 1)
+
 CUDA_MAJOR=$(echo "$CUDA_FULL_VERSION" | cut -d. -f1)
 TARGET_MINOR=$(echo "$CUDA_FULL_VERSION" | cut -d. -f2)
 

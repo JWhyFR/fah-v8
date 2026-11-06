@@ -16,8 +16,8 @@ apt-get remove --purge -y pipx && \
 
 echo "**** apt-get update & ugprade ****" && \
 	apt-get update && \
-	apt-get install --reinstall -y ca-certificates && update-ca-certificates && \
-	apt-get -y upgrade
+	apt-get -y upgrade && \
+	update-ca-certificates --fresh
 
 echo "**** install runtime packages : misc ****" && \
   apt-get install -y bzip2 libexpat1 screen

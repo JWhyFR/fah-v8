@@ -44,12 +44,25 @@ echo "Dépôt NVIDIA ciblé : $UBUNTU_REPO"
 # Ajout du dépôt NVIDIA
 mkdir -p /etc/apt/keyrings
 
-curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/3bf863cc.pub | \
-  gpg --yes --dearmor -o /etc/apt/keyrings/cuda-archive-keyring.gpg
+# URL de base du dépôt pour l'architecture x86_64
+REPO_URL="https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64"
 
-echo "deb [signed-by=/etc/apt/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/ /" > /etc/apt/sources.list.d/cuda.list
+# Récupération dynamique du nom de la clé .pub depuis l'index HTML
+KEY_NAME=$(curl -fsSL "${REPO_URL}/" | grep -oP '[A-Fa-f0-9]{8}\.pub' | head -n 1)
 
-wget -q https://developer.download.nvidia.com/compute/cuda/repos/${UBUNTU_REPO}/x86_64/cuda-${UBUNTU_REPO}.pin -O /etc/apt/preferences.d/cuda-repository-pin-600
+if [ -z "$KEY_NAME" ]; then
+    echo "Erreur : impossible de récupérer la clé GPG dynamiquement pour $UBUNTU_REPO." >&2
+    exit 1
+fi
+
+echo "Clé NVIDIA détectée : $KEY_NAME"
+
+curl -fsSL "${REPO_URL}/${KEY_NAME}" | \
+    gpg --yes --dearmor -o /etc/apt/keyrings/cuda-archive-keyring.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/cuda-archive-keyring.gpg] ${REPO_URL}/ /" > /etc/apt/sources.list.d/cuda.list
+
+wget -q "${REPO_URL}/cuda-${UBUNTU_REPO}.pin" -O /etc/apt/preferences.d/cuda-repository-pin-600
 
 echo "**** apt-get clean/update ****" && \
   apt-get clean && \

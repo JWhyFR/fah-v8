@@ -25,7 +25,7 @@ $(nvidia-smi --query-gpu=index,name,power.draw,power.limit,power.default_limit,t
 
   # 2. Ajout du bloc Réseau seulement toutes les 12 heures (toutes les 24 boucles de 30 min)
   if [ $count -ge $freq ]; then
-      TEMP_OUTPUT=$(./librespeed-cli --csv --duration 5 --server $(./librespeed-cli --list 2>/dev/null | grep -i "United States\|USA" | shuf -n 1 | awk -F':' '{print $1}') 2>/dev/null | grep -v '^$' | tail -n 1 | sed -E 's/("([^"]*)")?,/\2|/g')
+      TEMP_OUTPUT=$(./librespeed-cli --csv --duration 8 --server $(./librespeed-cli --list 2>/dev/null | grep -i "United States\|USA" | shuf -n 1 | awk -F':' '{print $1}') 2>/dev/null | grep -v '^$' | tail -n 1 | sed -E 's/("([^"]*)")?,/\2|/g')
       NETWORK_DATA=$(echo "$TEMP_OUTPUT" | awk -F'|' '{
           print "Serveur: " $2 "\nPing: " $4 " ms\nDownload: " $6 " Mbit/s\nUpload: " $7 " Mbit/s"
       }')      
